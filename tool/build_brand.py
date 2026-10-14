@@ -4,7 +4,7 @@ from pathlib import Path
 
 from PIL import Image, ImageDraw, ImageFont
 
-ROOT = Path('/workspace')
+ROOT = Path(__file__).resolve().parent.parent
 BRAND = ROOT / 'assets' / 'branding'
 FONT = ROOT / 'assets' / 'fonts' / 'Manrope-Bold.ttf'
 
