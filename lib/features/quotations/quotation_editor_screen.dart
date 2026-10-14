@@ -7,6 +7,7 @@ import 'package:cotizapro/data/providers.dart';
 import 'package:cotizapro/features/pro/limit_dialog.dart';
 import 'package:cotizapro/features/quotations/quote_labels.dart';
 import 'package:cotizapro/features/quotations/quote_models.dart';
+import 'package:cotizapro/features/services_catalog/catalog_labels.dart';
 import 'package:cotizapro/features/quotations/quote_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -294,6 +295,7 @@ class _QuotationEditorScreenState extends ConsumerState<QuotationEditorScreen> {
             icon: Icons.playlist_add_rounded,
             title: l10n.emptyLinesTitle,
             body: l10n.emptyLinesBody,
+            expand: false,
           )
         else
           SurfacePanel(
@@ -1064,7 +1066,21 @@ class _CatalogPickerState extends ConsumerState<_CatalogPicker> {
                           final item = visible[index];
                           return ListTile(
                             title: Text(item.name),
-                            subtitle: Text(kindLabel(l10n, item.kind)),
+                            subtitle: Text(
+                              [
+                                catalogCategoryLabel(
+                                  l10n,
+                                  item.category.trim().isEmpty
+                                      ? 'general'
+                                      : item.category,
+                                ),
+                                if ((item.description ?? '').trim().isNotEmpty)
+                                  item.description!.trim(),
+                                unitLabel(l10n, item.unit),
+                              ].join(' · '),
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                            ),
                             trailing: Text(
                               formatMoney(
                                 item.unitPriceMinor,

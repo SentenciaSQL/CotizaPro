@@ -30,7 +30,10 @@ final routerProvider = Provider<GoRouter>((ref) {
         branches: [
           StatefulShellBranch(
             routes: [
-              GoRoute(path: '/', builder: (context, state) => const DashboardScreen()),
+              GoRoute(
+                path: '/',
+                builder: (context, state) => const DashboardScreen(),
+              ),
             ],
           ),
           StatefulShellBranch(
@@ -61,12 +64,15 @@ final routerProvider = Provider<GoRouter>((ref) {
       ),
       GoRoute(
         path: '/quote/new',
-        pageBuilder: (context, state) => _page(state, const QuotationEditorScreen()),
+        pageBuilder: (context, state) =>
+            _page(state, const QuotationEditorScreen()),
       ),
       GoRoute(
         path: '/quote/preview',
         pageBuilder: (context, state) {
-          final document = state.extra is QuoteDocument ? state.extra! as QuoteDocument : null;
+          final document = state.extra is QuoteDocument
+              ? state.extra! as QuoteDocument
+              : null;
           return _page(state, PdfPreviewScreen(document: document));
         },
       ),
@@ -81,14 +87,18 @@ final routerProvider = Provider<GoRouter>((ref) {
             path: 'edit',
             pageBuilder: (context, state) => _page(
               state,
-              QuotationEditorScreen(quotationId: int.parse(state.pathParameters['id']!)),
+              QuotationEditorScreen(
+                quotationId: int.parse(state.pathParameters['id']!),
+              ),
             ),
           ),
           GoRoute(
             path: 'pdf',
             pageBuilder: (context, state) => _page(
               state,
-              PdfPreviewScreen(quotationId: int.parse(state.pathParameters['id']!)),
+              PdfPreviewScreen(
+                quotationId: int.parse(state.pathParameters['id']!),
+              ),
             ),
           ),
         ],
@@ -108,14 +118,17 @@ final routerProvider = Provider<GoRouter>((ref) {
             path: 'edit',
             pageBuilder: (context, state) => _page(
               state,
-              ClientFormScreen(clientId: int.parse(state.pathParameters['id']!)),
+              ClientFormScreen(
+                clientId: int.parse(state.pathParameters['id']!),
+              ),
             ),
           ),
         ],
       ),
       GoRoute(
         path: '/catalog/new',
-        pageBuilder: (context, state) => _page(state, const CatalogFormScreen()),
+        pageBuilder: (context, state) =>
+            _page(state, const CatalogFormScreen()),
       ),
       GoRoute(
         path: '/catalog/:id/edit',
@@ -130,7 +143,8 @@ final routerProvider = Provider<GoRouter>((ref) {
       ),
       GoRoute(
         path: '/settings/profile',
-        pageBuilder: (context, state) => _page(state, const BusinessProfileScreen()),
+        pageBuilder: (context, state) =>
+            _page(state, const BusinessProfileScreen()),
       ),
       GoRoute(
         path: '/settings/backup',

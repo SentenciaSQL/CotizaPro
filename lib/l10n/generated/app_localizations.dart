@@ -1118,6 +1118,66 @@ abstract class AppLocalizations {
   /// **'Categoría'**
   String get category;
 
+  /// No description provided for @catGeneral.
+  ///
+  /// In es, this message translates to:
+  /// **'General'**
+  String get catGeneral;
+
+  /// No description provided for @catLabor.
+  ///
+  /// In es, this message translates to:
+  /// **'Mano de obra'**
+  String get catLabor;
+
+  /// No description provided for @catMaterials.
+  ///
+  /// In es, this message translates to:
+  /// **'Materiales'**
+  String get catMaterials;
+
+  /// No description provided for @catInstallation.
+  ///
+  /// In es, this message translates to:
+  /// **'Instalación'**
+  String get catInstallation;
+
+  /// No description provided for @catRepair.
+  ///
+  /// In es, this message translates to:
+  /// **'Reparación'**
+  String get catRepair;
+
+  /// No description provided for @catMaintenance.
+  ///
+  /// In es, this message translates to:
+  /// **'Mantenimiento'**
+  String get catMaintenance;
+
+  /// No description provided for @catTransport.
+  ///
+  /// In es, this message translates to:
+  /// **'Transporte'**
+  String get catTransport;
+
+  /// No description provided for @catTools.
+  ///
+  /// In es, this message translates to:
+  /// **'Equipos y herramientas'**
+  String get catTools;
+
+  /// No description provided for @catProfessional.
+  ///
+  /// In es, this message translates to:
+  /// **'Servicios profesionales'**
+  String get catProfessional;
+
+  /// No description provided for @catOther.
+  ///
+  /// In es, this message translates to:
+  /// **'Otros'**
+  String get catOther;
+
   /// No description provided for @allCategories.
   ///
   /// In es, this message translates to:
@@ -1523,7 +1583,7 @@ abstract class AppLocalizations {
   /// No description provided for @proPriceNote.
   ///
   /// In es, this message translates to:
-  /// **'Precio orientativo: US\$5.99. El precio final lo muestra la tienda.'**
+  /// **'El precio de la compra única lo publica la tienda. Aparece aquí cuando el producto está disponible.'**
   String get proPriceNote;
 
   /// No description provided for @featureUnlimited.
@@ -1568,11 +1628,23 @@ abstract class AppLocalizations {
   /// **'Comprar Pro'**
   String get buyPro;
 
+  /// No description provided for @buyProPrice.
+  ///
+  /// In es, this message translates to:
+  /// **'Comprar Pro · {price}'**
+  String buyProPrice(String price);
+
   /// No description provided for @restorePurchases.
   ///
   /// In es, this message translates to:
   /// **'Restaurar compras'**
   String get restorePurchases;
+
+  /// No description provided for @restorePurchasesHint.
+  ///
+  /// In es, this message translates to:
+  /// **'Usa la misma cuenta de Google Play o App Store con la que compraste Pro.'**
+  String get restorePurchasesHint;
 
   /// No description provided for @proActiveTitle.
   ///

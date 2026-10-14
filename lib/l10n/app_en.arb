@@ -169,6 +169,16 @@
   "itemName": "Name",
   "itemDescription": "Description",
   "category": "Category",
+  "catGeneral": "General",
+  "catLabor": "Labor",
+  "catMaterials": "Materials",
+  "catInstallation": "Installation",
+  "catRepair": "Repair",
+  "catMaintenance": "Maintenance",
+  "catTransport": "Transport",
+  "catTools": "Equipment and tools",
+  "catProfessional": "Professional services",
+  "catOther": "Other",
   "allCategories": "All",
   "uncategorized": "Uncategorized",
   "price": "Price",
@@ -236,7 +246,7 @@
   "backupWorking": "Preparing backup",
   "proTitle": "CotizaPro Pro",
   "proSubtitle": "A one-time purchase for unlimited work.",
-  "proPriceNote": "Indicative price: US$5.99. The store shows the final price.",
+  "proPriceNote": "The store publishes the one-time price. It appears here when the product is available.",
   "featureUnlimited": "Unlimited quotes, clients and catalog",
   "featureNoAds": "No ads",
   "featureNoBrand": "PDF without CotizaPro branding",
@@ -244,7 +254,16 @@
   "featureLogo": "Business logo on the document",
   "featureHistory": "Date filter and CSV export",
   "buyPro": "Buy Pro",
+  "buyProPrice": "Buy Pro · {price}",
+  "@buyProPrice": {
+    "placeholders": {
+      "price": {
+        "type": "String"
+      }
+    }
+  },
   "restorePurchases": "Restore purchases",
+  "restorePurchasesHint": "Use the same Google Play or App Store account that bought Pro.",
   "proActiveTitle": "Pro is active",
   "proActiveBody": "Limits and PDF branding are unlocked on this device.",
   "productUnavailable": "The product is not available in the store yet.",

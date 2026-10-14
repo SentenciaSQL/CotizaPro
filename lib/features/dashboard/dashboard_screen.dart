@@ -27,10 +27,14 @@ class DashboardScreen extends ConsumerWidget {
     }
     if (profile.hasError || quotes.hasError) {
       return Scaffold(
-        body: ErrorView(message: l10n.errorGeneric, retryLabel: l10n.retry, onRetry: () {
-          ref.invalidate(profileProvider);
-          ref.invalidate(quotesProvider);
-        }),
+        body: ErrorView(
+          message: l10n.errorGeneric,
+          retryLabel: l10n.retry,
+          onRetry: () {
+            ref.invalidate(profileProvider);
+            ref.invalidate(quotesProvider);
+          },
+        ),
       );
     }
     final business = profile.requireValue;
@@ -39,14 +43,29 @@ class DashboardScreen extends ConsumerWidget {
     final name = business.businessName.trim().isEmpty
         ? l10n.yourBusiness
         : business.businessName.trim();
-    final greeting = greetingFor(context.l10n, DateTime.now(), business.ownerName);
+    final greeting = greetingFor(
+      context.l10n,
+      DateTime.now(),
+      business.ownerName,
+    );
     final openCount = items.where((quote) {
-      final display = displayStatusOf(status: quote.status, validUntil: quote.validUntil);
-      return display == QuoteDisplayStatus.draft || display == QuoteDisplayStatus.sent;
+      final display = displayStatusOf(
+        status: quote.status,
+        validUntil: quote.validUntil,
+      );
+      return display == QuoteDisplayStatus.draft ||
+          display == QuoteDisplayStatus.sent;
     }).length;
-    final accepted = items.where((quote) => quote.status == QuoteStatus.accepted.name);
-    final acceptedInCurrency = accepted.where((quote) => quote.currencyCode == business.currencyCode);
-    final acceptedSum = acceptedInCurrency.fold<int>(0, (sum, quote) => sum + quote.totalMinor);
+    final accepted = items.where(
+      (quote) => quote.status == QuoteStatus.accepted.name,
+    );
+    final acceptedInCurrency = accepted.where(
+      (quote) => quote.currencyCode == business.currencyCode,
+    );
+    final acceptedSum = acceptedInCurrency.fold<int>(
+      0,
+      (sum, quote) => sum + quote.totalMinor,
+    );
     final locale = Localizations.localeOf(context).toString();
 
     return Scaffold(
@@ -64,11 +83,19 @@ class DashboardScreen extends ConsumerWidget {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(greeting, style: context.text.bodyMedium?.copyWith(color: context.palette.muted)),
+                            Text(
+                              greeting,
+                              style: context.text.bodyMedium?.copyWith(
+                                color: context.palette.muted,
+                              ),
+                            ),
                             const SizedBox(height: 4),
                             GestureDetector(
                               onTap: () => context.push('/settings/profile'),
-                              child: Text(name, style: context.text.headlineMedium),
+                              child: Text(
+                                name,
+                                style: context.text.headlineMedium,
+                              ),
                             ),
                           ],
                         ),
@@ -86,11 +113,16 @@ class DashboardScreen extends ConsumerWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(l10n.completeProfileTitle, style: context.text.titleMedium),
+                          Text(
+                            l10n.completeProfileTitle,
+                            style: context.text.titleMedium,
+                          ),
                           const SizedBox(height: 6),
                           Text(
                             l10n.completeProfileBody,
-                            style: context.text.bodyMedium?.copyWith(color: context.palette.muted),
+                            style: context.text.bodyMedium?.copyWith(
+                              color: context.palette.muted,
+                            ),
                           ),
                           const SizedBox(height: 12),
                           SecondaryButton(
@@ -115,6 +147,7 @@ class DashboardScreen extends ConsumerWidget {
                       icon: Icons.description_outlined,
                       title: l10n.emptyQuotesTitle,
                       body: l10n.emptyQuotesBody,
+                      expand: false,
                     )
                   else ...[
                     SurfacePanel(
@@ -125,9 +158,15 @@ class DashboardScreen extends ConsumerWidget {
                           const SizedBox(height: 14),
                           Row(
                             children: [
-                              _Stat(value: '${items.length}', label: l10n.statQuotes),
+                              _Stat(
+                                value: '${items.length}',
+                                label: l10n.statQuotes,
+                              ),
                               _Stat(value: '$openCount', label: l10n.statOpen),
-                              _Stat(value: '${accepted.length}', label: l10n.statAccepted),
+                              _Stat(
+                                value: '${accepted.length}',
+                                label: l10n.statAccepted,
+                              ),
                             ],
                           ),
                           const SizedBox(height: 12),
@@ -137,7 +176,11 @@ class DashboardScreen extends ConsumerWidget {
                           ),
                           const SizedBox(height: 2),
                           Text(
-                            formatMoney(acceptedSum, business.currencyCode, locale),
+                            formatMoney(
+                              acceptedSum,
+                              business.currencyCode,
+                              locale,
+                            ),
                             style: context.text.titleLarge,
                           ),
                         ],
@@ -154,10 +197,12 @@ class DashboardScreen extends ConsumerWidget {
                       child: Column(
                         children: [
                           for (var i = 0; i < items.take(5).length; i++) ...[
-                            if (i > 0) Divider(height: 1, color: context.palette.line),
+                            if (i > 0)
+                              Divider(height: 1, color: context.palette.line),
                             QuoteTile(
                               quote: items[i],
-                              onTap: () => context.push('/quote/${items[i].id}'),
+                              onTap: () =>
+                                  context.push('/quote/${items[i].id}'),
                             ),
                           ],
                         ],
@@ -286,7 +331,12 @@ class _Shortcut extends StatelessWidget {
               Icon(icon, color: context.palette.teal),
               const Spacer(),
               Text(title, style: context.text.titleSmall),
-              Text(hint, style: context.text.bodySmall, maxLines: 1, overflow: TextOverflow.ellipsis),
+              Text(
+                hint,
+                style: context.text.bodySmall,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
             ],
           ),
         ),

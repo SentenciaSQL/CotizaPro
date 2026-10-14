@@ -533,6 +533,36 @@ class AppLocalizationsEs extends AppLocalizations {
   String get category => 'Categoría';
 
   @override
+  String get catGeneral => 'General';
+
+  @override
+  String get catLabor => 'Mano de obra';
+
+  @override
+  String get catMaterials => 'Materiales';
+
+  @override
+  String get catInstallation => 'Instalación';
+
+  @override
+  String get catRepair => 'Reparación';
+
+  @override
+  String get catMaintenance => 'Mantenimiento';
+
+  @override
+  String get catTransport => 'Transporte';
+
+  @override
+  String get catTools => 'Equipos y herramientas';
+
+  @override
+  String get catProfessional => 'Servicios profesionales';
+
+  @override
+  String get catOther => 'Otros';
+
+  @override
   String get allCategories => 'Todas';
 
   @override
@@ -741,7 +771,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get proPriceNote =>
-      'Precio orientativo: US\$5.99. El precio final lo muestra la tienda.';
+      'El precio de la compra única lo publica la tienda. Aparece aquí cuando el producto está disponible.';
 
   @override
   String get featureUnlimited => 'Cotizaciones, clientes y catálogo sin límite';
@@ -765,7 +795,16 @@ class AppLocalizationsEs extends AppLocalizations {
   String get buyPro => 'Comprar Pro';
 
   @override
+  String buyProPrice(String price) {
+    return 'Comprar Pro · $price';
+  }
+
+  @override
   String get restorePurchases => 'Restaurar compras';
+
+  @override
+  String get restorePurchasesHint =>
+      'Usa la misma cuenta de Google Play o App Store con la que compraste Pro.';
 
   @override
   String get proActiveTitle => 'Pro está activo';

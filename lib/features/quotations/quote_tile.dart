@@ -115,7 +115,9 @@ class TotalsBlock extends StatelessWidget {
             Expanded(child: Text(l10n.total, style: context.text.titleMedium)),
             Text(
               money(totals.totalMinor),
-              style: context.text.titleLarge?.copyWith(color: context.palette.teal),
+              style: context.text.titleLarge?.copyWith(
+                color: context.palette.teal,
+              ),
             ),
           ],
         ),
@@ -129,7 +131,12 @@ class TotalsBlock extends StatelessWidget {
       child: Row(
         children: [
           Expanded(
-            child: Text(label, style: context.text.bodyMedium?.copyWith(color: context.palette.muted)),
+            child: Text(
+              label,
+              style: context.text.bodyMedium?.copyWith(
+                color: context.palette.muted,
+              ),
+            ),
           ),
           Text(value, style: context.text.bodyMedium),
         ],

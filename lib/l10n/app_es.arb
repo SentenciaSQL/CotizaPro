@@ -169,6 +169,16 @@
   "itemName": "Nombre",
   "itemDescription": "Descripción",
   "category": "Categoría",
+  "catGeneral": "General",
+  "catLabor": "Mano de obra",
+  "catMaterials": "Materiales",
+  "catInstallation": "Instalación",
+  "catRepair": "Reparación",
+  "catMaintenance": "Mantenimiento",
+  "catTransport": "Transporte",
+  "catTools": "Equipos y herramientas",
+  "catProfessional": "Servicios profesionales",
+  "catOther": "Otros",
   "allCategories": "Todas",
   "uncategorized": "Sin categoría",
   "price": "Precio",
@@ -236,7 +246,7 @@
   "backupWorking": "Preparando copia",
   "proTitle": "CotizaPro Pro",
   "proSubtitle": "Una compra única para trabajar sin límites.",
-  "proPriceNote": "Precio orientativo: US$5.99. El precio final lo muestra la tienda.",
+  "proPriceNote": "El precio de la compra única lo publica la tienda. Aparece aquí cuando el producto está disponible.",
   "featureUnlimited": "Cotizaciones, clientes y catálogo sin límite",
   "featureNoAds": "Sin anuncios",
   "featureNoBrand": "PDF sin la marca CotizaPro",
@@ -244,7 +254,16 @@
   "featureLogo": "Logotipo comercial en el documento",
   "featureHistory": "Filtro por fechas y exportación CSV",
   "buyPro": "Comprar Pro",
+  "buyProPrice": "Comprar Pro · {price}",
+  "@buyProPrice": {
+    "placeholders": {
+      "price": {
+        "type": "String"
+      }
+    }
+  },
   "restorePurchases": "Restaurar compras",
+  "restorePurchasesHint": "Usa la misma cuenta de Google Play o App Store con la que compraste Pro.",
   "proActiveTitle": "Pro está activo",
   "proActiveBody": "Los límites y la marca de los PDF ya están desbloqueados en este dispositivo.",
   "productUnavailable": "El producto todavía no está disponible en la tienda.",

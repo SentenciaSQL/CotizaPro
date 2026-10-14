@@ -52,7 +52,9 @@ class _ClientListScreenState extends ConsumerState<ClientListScreen> {
           final query = _query.trim().toLowerCase();
           final visible = items.where((client) {
             if (query.isEmpty) return true;
-            final haystack = '${client.name} ${client.company ?? ''} ${client.email ?? ''} ${client.phone ?? ''}'.toLowerCase();
+            final haystack =
+                '${client.name} ${client.company ?? ''} ${client.email ?? ''} ${client.phone ?? ''}'
+                    .toLowerCase();
             return haystack.contains(query);
           }).toList();
           if (items.isEmpty) {
@@ -85,11 +87,20 @@ class _ClientListScreenState extends ConsumerState<ClientListScreen> {
                     children: [
                       for (final client in visible)
                         ListTile(
-                          contentPadding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                          contentPadding: const EdgeInsets.symmetric(
+                            horizontal: 8,
+                            vertical: 4,
+                          ),
                           leading: InitialsAvatar(name: client.name),
-                          title: Text(client.name, style: context.text.titleSmall),
+                          title: Text(
+                            client.name,
+                            style: context.text.titleSmall,
+                          ),
                           subtitle: Text(
-                            [client.company, client.phone].whereType<String>().where((part) => part.isNotEmpty).join(' · '),
+                            [client.company, client.phone]
+                                .whereType<String>()
+                                .where((part) => part.isNotEmpty)
+                                .join(' · '),
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                           ),

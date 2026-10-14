@@ -83,7 +83,9 @@ class _ClientFormScreenState extends ConsumerState<ClientFormScreen> {
                     controller: _name,
                     textCapitalization: TextCapitalization.words,
                     decoration: InputDecoration(labelText: l10n.clientName),
-                    validator: (value) => value == null || value.trim().isEmpty ? l10n.fieldRequired : null,
+                    validator: (value) => value == null || value.trim().isEmpty
+                        ? l10n.fieldRequired
+                        : null,
                   ),
                   const SizedBox(height: 12),
                   TextFormField(
@@ -98,7 +100,8 @@ class _ClientFormScreenState extends ConsumerState<ClientFormScreen> {
                     validator: (value) {
                       final text = value?.trim() ?? '';
                       if (text.isEmpty) return null;
-                      final ok = RegExp(r'^[^@\s]+@[^@\s]+\.[^@\s]+$').hasMatch(text);
+                      final ok = RegExp(r'^[^@\s]+@[^@\s]+\.[^@\s]+$')
+                          .hasMatch(text);
                       return ok ? null : l10n.invalidEmail;
                     },
                   ),
@@ -174,7 +177,11 @@ class _ClientFormScreenState extends ConsumerState<ClientFormScreen> {
       context.pop();
     } on ClientLimitException {
       if (!mounted) return;
-      await showProLimitDialog(context, title: l10n.clientLimitTitle, body: l10n.clientLimitBody);
+      await showProLimitDialog(
+        context,
+        title: l10n.clientLimitTitle,
+        body: l10n.clientLimitBody,
+      );
     } catch (_) {
       if (mounted) showAppMessage(context, l10n.errorGeneric);
     } finally {
