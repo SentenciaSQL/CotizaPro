@@ -1118,6 +1118,66 @@ abstract class AppLocalizations {
   /// **'Categoría'**
   String get category;
 
+  /// No description provided for @catGeneral.
+  ///
+  /// In es, this message translates to:
+  /// **'General'**
+  String get catGeneral;
+
+  /// No description provided for @catLabor.
+  ///
+  /// In es, this message translates to:
+  /// **'Mano de obra'**
+  String get catLabor;
+
+  /// No description provided for @catMaterials.
+  ///
+  /// In es, this message translates to:
+  /// **'Materiales'**
+  String get catMaterials;
+
+  /// No description provided for @catInstallation.
+  ///
+  /// In es, this message translates to:
+  /// **'Instalación'**
+  String get catInstallation;
+
+  /// No description provided for @catRepair.
+  ///
+  /// In es, this message translates to:
+  /// **'Reparación'**
+  String get catRepair;
+
+  /// No description provided for @catMaintenance.
+  ///
+  /// In es, this message translates to:
+  /// **'Mantenimiento'**
+  String get catMaintenance;
+
+  /// No description provided for @catTransport.
+  ///
+  /// In es, this message translates to:
+  /// **'Transporte'**
+  String get catTransport;
+
+  /// No description provided for @catTools.
+  ///
+  /// In es, this message translates to:
+  /// **'Equipos y herramientas'**
+  String get catTools;
+
+  /// No description provided for @catProfessional.
+  ///
+  /// In es, this message translates to:
+  /// **'Servicios profesionales'**
+  String get catProfessional;
+
+  /// No description provided for @catOther.
+  ///
+  /// In es, this message translates to:
+  /// **'Otros'**
+  String get catOther;
+
   /// No description provided for @allCategories.
   ///
   /// In es, this message translates to:

@@ -1,3 +1,4 @@
+import 'package:cotizapro/core/catalog/catalog_categories.dart';
 import 'package:cotizapro/core/errors/app_exceptions.dart';
 import 'package:cotizapro/core/l10n/l10n_ext.dart';
 import 'package:cotizapro/core/money/money.dart';
@@ -6,6 +7,7 @@ import 'package:cotizapro/data/providers.dart';
 import 'package:cotizapro/features/pro/limit_dialog.dart';
 import 'package:cotizapro/features/quotations/quote_labels.dart';
 import 'package:cotizapro/features/quotations/quote_models.dart';
+import 'package:cotizapro/features/services_catalog/catalog_labels.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -23,8 +25,8 @@ class _CatalogFormScreenState extends ConsumerState<CatalogFormScreen> {
   final _formKey = GlobalKey<FormState>();
   final _name = TextEditingController();
   final _description = TextEditingController();
-  final _category = TextEditingController();
   final _price = TextEditingController();
+  String _category = 'general';
   String _unit = 'unit';
   String _kind = 'service';
   var _ready = false;
@@ -46,11 +48,16 @@ class _CatalogFormScreenState extends ConsumerState<CatalogFormScreen> {
     if (!mounted) return;
     if (item != null) {
       final locale = Localizations.localeOf(context).toString();
-      final currency = ref.read(profileProvider).asData?.value.currencyCode ?? 'USD';
+      final currency =
+          ref.read(profileProvider).asData?.value.currencyCode ?? 'USD';
       _name.text = item.name;
       _description.text = item.description ?? '';
-      _category.text = item.category;
-      _price.text = scaledToInput(item.unitPriceMinor, currencyScale(currency), locale);
+      _category = normalizeCatalogCategory(item.category);
+      _price.text = scaledToInput(
+        item.unitPriceMinor,
+        currencyScale(currency),
+        locale,
+      );
       _unit = unitCodes.contains(item.unit) ? item.unit : 'unit';
       _kind = item.kind;
     }
@@ -61,7 +68,6 @@ class _CatalogFormScreenState extends ConsumerState<CatalogFormScreen> {
   void dispose() {
     _name.dispose();
     _description.dispose();
-    _category.dispose();
     _price.dispose();
     super.dispose();
   }
@@ -92,29 +98,60 @@ class _CatalogFormScreenState extends ConsumerState<CatalogFormScreen> {
                   TextFormField(
                     controller: _name,
                     decoration: InputDecoration(labelText: l10n.itemName),
-                    validator: (value) => value == null || value.trim().isEmpty ? l10n.fieldRequired : null,
+                    validator: (value) => value == null || value.trim().isEmpty
+                        ? l10n.fieldRequired
+                        : null,
                   ),
                   const SizedBox(height: 12),
                   TextFormField(
                     controller: _description,
                     minLines: 2,
                     maxLines: 4,
-                    decoration: InputDecoration(labelText: l10n.itemDescription),
+                    decoration: InputDecoration(
+                      labelText: l10n.itemDescription,
+                    ),
                   ),
                   const SizedBox(height: 12),
-                  TextFormField(
-                    controller: _category,
-                    decoration: InputDecoration(labelText: l10n.category),
+                  AppSelectField<String>(
+                    label: l10n.category,
+                    value: _category,
+                    items: [
+                      for (final id in <String>{
+                        ...catalogCategoryIds,
+                        _category,
+                      })
+                        DropdownMenuItem(
+                          value: id,
+                          child: Text(catalogCategoryLabel(l10n, id)),
+                        ),
+                    ],
+                    onChanged: (value) {
+                      if (value == null) return;
+                      setState(() => _category = value);
+                    },
                   ),
                   const SizedBox(height: 12),
                   TextFormField(
                     controller: _price,
-                    keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                    keyboardType: const TextInputType.numberWithOptions(
+                      decimal: true,
+                    ),
                     decoration: InputDecoration(labelText: l10n.price),
                     validator: (value) {
-                      final currency = ref.read(profileProvider).asData?.value.currencyCode ?? 'USD';
-                      final parsed = parseDecimalToScaled(value ?? '', currencyScale(currency));
-                      if (parsed == null || parsed < 0) return l10n.invalidAmount;
+                      final currency =
+                          ref
+                              .read(profileProvider)
+                              .asData
+                              ?.value
+                              .currencyCode ??
+                          'USD';
+                      final parsed = parseDecimalToScaled(
+                        value ?? '',
+                        currencyScale(currency),
+                      );
+                      if (parsed == null || parsed < 0) {
+                        return l10n.invalidAmount;
+                      }
                       return null;
                     },
                   ),
@@ -124,7 +161,12 @@ class _CatalogFormScreenState extends ConsumerState<CatalogFormScreen> {
                   Wrap(
                     spacing: 8,
                     children: [
-                      for (final kind in ['labor', 'material', 'service', 'product'])
+                      for (final kind in [
+                        'labor',
+                        'material',
+                        'service',
+                        'product',
+                      ])
                         ChoiceChip(
                           label: Text(kindLabel(l10n, kind)),
                           selected: _kind == kind,
@@ -147,7 +189,11 @@ class _CatalogFormScreenState extends ConsumerState<CatalogFormScreen> {
                     ],
                   ),
                   const SizedBox(height: 20),
-                  PrimaryButton(label: l10n.save, loading: _loading, onPressed: _save),
+                  PrimaryButton(
+                    label: l10n.save,
+                    loading: _loading,
+                    onPressed: _save,
+                  ),
                 ],
               ),
             ),
@@ -158,7 +204,8 @@ class _CatalogFormScreenState extends ConsumerState<CatalogFormScreen> {
     if (!_formKey.currentState!.validate()) return;
     setState(() => _loading = true);
     final l10n = context.l10n;
-    final currency = ref.read(profileProvider).asData?.value.currencyCode ?? 'USD';
+    final currency =
+        ref.read(profileProvider).asData?.value.currencyCode ?? 'USD';
     final price = parseDecimalToScaled(_price.text, currencyScale(currency))!;
     final isPro = ref.read(settingsProvider).asData?.value.isPro ?? false;
     try {
@@ -167,7 +214,7 @@ class _CatalogFormScreenState extends ConsumerState<CatalogFormScreen> {
         await repo.create(
           name: _name.text,
           description: _description.text,
-          category: _category.text,
+          category: _category,
           unit: _unit,
           unitPriceMinor: price,
           kind: _kind,
@@ -178,7 +225,7 @@ class _CatalogFormScreenState extends ConsumerState<CatalogFormScreen> {
           id: widget.itemId!,
           name: _name.text,
           description: _description.text,
-          category: _category.text,
+          category: _category,
           unit: _unit,
           unitPriceMinor: price,
           kind: _kind,
@@ -189,7 +236,11 @@ class _CatalogFormScreenState extends ConsumerState<CatalogFormScreen> {
       context.pop();
     } on CatalogLimitException {
       if (!mounted) return;
-      await showProLimitDialog(context, title: l10n.catalogLimitTitle, body: l10n.catalogLimitBody);
+      await showProLimitDialog(
+        context,
+        title: l10n.catalogLimitTitle,
+        body: l10n.catalogLimitBody,
+      );
     } catch (_) {
       if (mounted) showAppMessage(context, l10n.errorGeneric);
     } finally {

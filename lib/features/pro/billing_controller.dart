@@ -116,12 +116,7 @@ class BillingController {
       );
     } catch (error) {
       debugPrint('Product query failed: $error');
-      _emit(
-        state.copyWith(
-          loadingProduct: false,
-          messageCode: 'unavailable',
-        ),
-      );
+      _emit(state.copyWith(loadingProduct: false, messageCode: 'unavailable'));
     }
   }
 
@@ -222,6 +217,5 @@ class BillingController {
     if (!_updates.isClosed) _updates.add(next);
   }
 
-  bool get _mobile =>
-      !kIsWeb && (Platform.isAndroid || Platform.isIOS);
+  bool get _mobile => !kIsWeb && (Platform.isAndroid || Platform.isIOS);
 }

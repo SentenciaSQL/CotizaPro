@@ -1,5 +1,6 @@
 import 'package:drift/drift.dart';
 
+import '../../core/catalog/catalog_categories.dart';
 import '../../core/constants/limits.dart';
 import '../../core/errors/app_exceptions.dart';
 import '../database/app_database.dart';
@@ -47,7 +48,7 @@ class CatalogRepository {
           CatalogItemsCompanion.insert(
             name: name.trim(),
             description: Value(_blank(description)),
-            category: Value(category?.trim() ?? ''),
+            category: Value(normalizeCatalogCategory(category)),
             unit: Value(unit),
             unitPriceMinor: unitPriceMinor,
             kind: kind,
@@ -72,7 +73,7 @@ class CatalogRepository {
       CatalogItemsCompanion(
         name: Value(name.trim()),
         description: Value(_blank(description)),
-        category: Value(category?.trim() ?? ''),
+        category: Value(normalizeCatalogCategory(category)),
         unit: Value(unit),
         unitPriceMinor: Value(unitPriceMinor),
         kind: Value(kind),

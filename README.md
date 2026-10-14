@@ -12,10 +12,11 @@ Android e iOS son las plataformas de publicación. El proyecto también incluye 
 - Totales en unidades menores enteras (céntimos), con redondeo half-up. El idioma y la moneda se configuran por separado.
 - Borrador, enviada, aceptada y rechazada. «Vencida» se calcula cuando una cotización enviada supera su fecha.
 - Vista previa y uso compartido del PDF en español o inglés, con varias páginas, marca de agua de borrador y pie de página.
-- Clientes, catálogo, historial con búsqueda y filtros, duplicar, editar y eliminar con confirmación.
+- Clientes, catálogo con categorías fijas traducibles, historial con búsqueda y filtros, duplicar, editar y eliminar con confirmación.
 - Perfil comercial, logotipo, numeración, tema claro, oscuro o del sistema, y copias de seguridad JSON.
 - Plan gratuito: 5 cotizaciones, 20 clientes y 30 conceptos. Consultar y exportar lo ya creado sigue disponible al llegar al límite.
 - Compra única no consumible `cotizapro_pro` para cotizaciones ilimitadas, sin anuncios, sin marca en el PDF, logotipo y opciones avanzadas de documento e historial. Pro solo se activa con una compra o restauración confirmada por la tienda.
+- Banners de prueba solo al final de las listas de clientes, catálogo e historial. No aparecen en el inicio, el editor, el PDF ni los estados vacíos.
 
 No hay datos de demostración. La primera apertura está vacía.
 
@@ -81,7 +82,7 @@ Los identificadores actuales son los de prueba de Google.
 4. Configurar el formulario UMP de consentimiento para el EEE. La app pide consentimiento y, si no hay personalización, solicita anuncios no personalizados.
 5. Crear el producto no consumible `cotizapro_pro` en Play Console y App Store Connect. Precio orientativo: 5,99 USD. El precio cobrado lo define la tienda.
 6. Activar la capacidad In-App Purchase en Xcode y la facturación en Play Console. Probar con cuentas de licencia y StoreKit, no con compras simuladas en el código.
-7. Firmar los binarios de release con el almacén de la cuenta publicadora. El `applicationId` actual es `com.cotizapro.cotizapro`.
+7. Firmar los binarios de release con el almacén de la cuenta publicadora. El `applicationId` de Android es `com.sentenciasql.cotizapro`. La app de AdMob de producción debe registrarse con ese identificador; el id de prueba actual no está ligado a un paquete publicado.
 
 Los anuncios solo aparecen en historial, clientes, catálogo y ajustes, y desaparecen si Pro está activo. No se muestran en el inicio ni en el editor.
 

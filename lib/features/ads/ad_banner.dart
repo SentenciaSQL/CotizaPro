@@ -55,16 +55,26 @@ class AdBannerSlot extends ConsumerStatefulWidget {
 class _AdBannerSlotState extends ConsumerState<AdBannerSlot> {
   BannerAd? _ad;
   var _loaded = false;
+  var _loading = false;
+
+  bool get _supported => !kIsWeb && (Platform.isAndroid || Platform.isIOS);
 
   @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) => _maybeLoad());
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _sync();
   }
 
-  void _maybeLoad() {
+  void _sync() {
     final settings = ref.read(settingsProvider).asData?.value;
-    if (settings == null || settings.isPro || !_supported) return;
+    final visible = TickerMode.valuesOf(context).enabled;
+    final blocked =
+        settings == null || settings.isPro || !visible || !_supported;
+    if (blocked) {
+      _release();
+      return;
+    }
+    if (_ad != null || _loading) return;
     final unitId = bannerAdUnitId(android: Platform.isAndroid);
     if (unitId.contains('X')) return;
     final ad = BannerAd(
@@ -73,29 +83,45 @@ class _AdBannerSlotState extends ConsumerState<AdBannerSlot> {
       request: const AdRequest(nonPersonalizedAds: true),
       listener: BannerAdListener(
         onAdLoaded: (ad) {
-          if (mounted) setState(() => _loaded = true);
+          if (!mounted || _ad != ad) {
+            ad.dispose();
+            return;
+          }
+          setState(() => _loaded = true);
         },
         onAdFailedToLoad: (ad, error) {
           debugPrint('Banner failed: ${error.message}');
           ad.dispose();
-          if (mounted) {
-            setState(() {
-              _ad = null;
-              _loaded = false;
-            });
+          if (_ad == ad) _ad = null;
+          _loading = false;
+          if (mounted && _loaded) {
+            setState(() => _loaded = false);
           }
         },
       ),
     );
     _ad = ad;
+    _loading = true;
     ad.load();
   }
 
-  bool get _supported => !kIsWeb && (Platform.isAndroid || Platform.isIOS);
+  void _release() {
+    final ad = _ad;
+    if (ad == null && !_loading && !_loaded) return;
+    _ad = null;
+    _loading = false;
+    final wasLoaded = _loaded;
+    _loaded = false;
+    if (wasLoaded && mounted) setState(() {});
+    if (ad != null) {
+      WidgetsBinding.instance.addPostFrameCallback((_) => ad.dispose());
+    }
+  }
 
   @override
   void dispose() {
     _ad?.dispose();
+    _ad = null;
     super.dispose();
   }
 
@@ -105,13 +131,14 @@ class _AdBannerSlotState extends ConsumerState<AdBannerSlot> {
     if (settings == null || settings.isPro || !_loaded || _ad == null) {
       return const SizedBox.shrink();
     }
+    final ad = _ad!;
     return Padding(
-      padding: const EdgeInsets.only(top: 16),
+      padding: const EdgeInsets.only(top: 16, bottom: 8),
       child: Center(
         child: SizedBox(
-          width: _ad!.size.width.toDouble(),
-          height: _ad!.size.height.toDouble(),
-          child: AdWidget(ad: _ad!),
+          width: ad.size.width.toDouble(),
+          height: ad.size.height.toDouble(),
+          child: AdWidget(ad: ad),
         ),
       ),
     );

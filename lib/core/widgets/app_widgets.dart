@@ -72,10 +72,7 @@ class SecondaryButton extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         mainAxisSize: MainAxisSize.min,
         children: [
-          if (icon != null) ...[
-            Icon(icon, size: 20),
-            const SizedBox(width: 8),
-          ],
+          if (icon != null) ...[Icon(icon, size: 20), const SizedBox(width: 8)],
           Flexible(
             child: Text(label, maxLines: 1, overflow: TextOverflow.ellipsis),
           ),
@@ -110,7 +107,12 @@ class SurfacePanel extends StatelessWidget {
 }
 
 class SectionLabel extends StatelessWidget {
-  const SectionLabel({super.key, required this.title, this.action, this.onAction});
+  const SectionLabel({
+    super.key,
+    required this.title,
+    this.action,
+    this.onAction,
+  });
 
   final String title;
   final String? action;
@@ -120,9 +122,7 @@ class SectionLabel extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        Expanded(
-          child: Text(title, style: context.text.titleMedium),
-        ),
+        Expanded(child: Text(title, style: context.text.titleMedium)),
         if (action != null)
           TextButton(onPressed: onAction, child: Text(action!)),
       ],
@@ -138,6 +138,7 @@ class EmptyState extends StatelessWidget {
     required this.body,
     this.actionLabel,
     this.onAction,
+    this.expand = true,
   });
 
   final IconData icon;
@@ -146,46 +147,109 @@ class EmptyState extends StatelessWidget {
   final String? actionLabel;
   final VoidCallback? onAction;
 
+  /// Fills the space between the app bar and the bottom navigation.
+  final bool expand;
+
   @override
   Widget build(BuildContext context) {
     final palette = context.palette;
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Container(
-            width: 72,
-            height: 72,
-            decoration: BoxDecoration(
-              color: palette.tealSoft,
-              shape: BoxShape.circle,
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final width = constraints.hasBoundedWidth ? constraints.maxWidth : 0.0;
+        final height = expand && constraints.hasBoundedHeight
+            ? constraints.maxHeight
+            : 0.0;
+        return SingleChildScrollView(
+          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
+          child: ConstrainedBox(
+            constraints: BoxConstraints(
+              minWidth: width > 48 ? width - 48 : 0,
+              minHeight: height > 48 ? height - 48 : 0,
             ),
-            child: Icon(icon, color: palette.teal, size: 32),
+            child: Center(
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: 360),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Align(
+                      child: Container(
+                        width: 72,
+                        height: 72,
+                        decoration: BoxDecoration(
+                          color: palette.tealSoft,
+                          shape: BoxShape.circle,
+                        ),
+                        child: Icon(icon, color: palette.teal, size: 32),
+                      ),
+                    ),
+                    const SizedBox(height: 18),
+                    Text(
+                      title,
+                      textAlign: TextAlign.center,
+                      style: context.text.titleLarge,
+                    ),
+                    if (body.isNotEmpty) ...[
+                      const SizedBox(height: 8),
+                      Text(
+                        body,
+                        textAlign: TextAlign.center,
+                        style: context.text.bodyMedium?.copyWith(
+                          color: palette.muted,
+                        ),
+                      ),
+                    ],
+                    if (actionLabel != null) ...[
+                      const SizedBox(height: 20),
+                      SizedBox(
+                        width: double.infinity,
+                        child: PrimaryButton(
+                          label: actionLabel!,
+                          icon: Icons.add_rounded,
+                          onPressed: onAction,
+                        ),
+                      ),
+                    ],
+                  ],
+                ),
+              ),
+            ),
           ),
-          const SizedBox(height: 18),
-          Text(
-            title,
-            textAlign: TextAlign.center,
-            style: context.text.titleLarge,
-          ),
-          if (body.isNotEmpty) ...[
-            const SizedBox(height: 8),
-            Text(
-              body,
-              textAlign: TextAlign.center,
-              style: context.text.bodyMedium?.copyWith(color: palette.muted),
-            ),
-          ],
-          if (actionLabel != null) ...[
-            const SizedBox(height: 20),
-            PrimaryButton(
-              label: actionLabel!,
-              icon: Icons.add_rounded,
-              onPressed: onAction,
-            ),
-          ],
-        ],
+        );
+      },
+    );
+  }
+}
+
+class AppSelectField<T> extends StatelessWidget {
+  const AppSelectField({
+    super.key,
+    required this.label,
+    required this.value,
+    required this.items,
+    required this.onChanged,
+  });
+
+  final String label;
+  final T value;
+  final List<DropdownMenuItem<T>> items;
+  final ValueChanged<T?> onChanged;
+
+  @override
+  Widget build(BuildContext context) {
+    return InputDecorator(
+      decoration: InputDecoration(labelText: label),
+      child: DropdownButtonHideUnderline(
+        child: DropdownButton<T>(
+          value: value,
+          isExpanded: true,
+          borderRadius: BorderRadius.circular(AppRadius.md),
+          dropdownColor: context.palette.surface,
+          style: context.text.bodyLarge,
+          items: items,
+          onChanged: onChanged,
+        ),
       ),
     );
   }
@@ -281,11 +345,7 @@ class SearchField extends StatelessWidget {
 }
 
 class StatusBadge extends StatelessWidget {
-  const StatusBadge({
-    super.key,
-    required this.label,
-    required this.tone,
-  });
+  const StatusBadge({super.key, required this.label, required this.tone});
 
   final String label;
   final StatusTone tone;

@@ -1,4 +1,4 @@
-package com.cotizapro.cotizapro
+package com.sentenciasql.cotizapro
 
 import io.flutter.embedding.android.FlutterActivity
 
