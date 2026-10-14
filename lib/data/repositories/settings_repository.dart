@@ -39,11 +39,19 @@ class SettingsRepository {
         .write(companion.copyWith(updatedAt: Value(DateTime.now())));
   }
 
+  /// Caches a purchase the store has already confirmed. Repeated calls with
+  /// the same transaction do not rewrite the row.
   Future<void> unlockPro({
     required String productId,
     required String? transactionId,
-  }) {
-    return save(
+  }) async {
+    final current = await get();
+    if (current.isPro &&
+        current.proProductId == productId &&
+        current.proTransactionId == transactionId) {
+      return;
+    }
+    await save(
       AppSettingsCompanion(
         isPro: const Value(true),
         proProductId: Value(productId),
@@ -51,5 +59,13 @@ class SettingsRepository {
         proUnlockedAt: Value(DateTime.now()),
       ),
     );
+  }
+
+  /// Drops Pro after a successful store query that no longer includes it.
+  /// A store error must not call this.
+  Future<void> revokePro() async {
+    final current = await get();
+    if (!current.isPro) return;
+    await save(const AppSettingsCompanion(isPro: Value(false)));
   }
 }

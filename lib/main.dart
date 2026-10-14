@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:cotizapro/app.dart';
 import 'package:cotizapro/data/database/app_database.dart';
 import 'package:cotizapro/data/providers.dart';
@@ -15,7 +17,7 @@ Future<void> main() async {
   await profiles.ensureDefaults();
   await settings.ensureDefaults();
   final billing = BillingController(settings);
-  await billing.start();
+  unawaited(billing.start());
   runApp(
     ProviderScope(
       overrides: [
