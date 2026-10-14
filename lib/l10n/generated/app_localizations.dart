@@ -1583,7 +1583,7 @@ abstract class AppLocalizations {
   /// No description provided for @proPriceNote.
   ///
   /// In es, this message translates to:
-  /// **'Precio orientativo: US\$5.99. El precio final lo muestra la tienda.'**
+  /// **'El precio de la compra única lo publica la tienda. Aparece aquí cuando el producto está disponible.'**
   String get proPriceNote;
 
   /// No description provided for @featureUnlimited.
@@ -1628,11 +1628,23 @@ abstract class AppLocalizations {
   /// **'Comprar Pro'**
   String get buyPro;
 
+  /// No description provided for @buyProPrice.
+  ///
+  /// In es, this message translates to:
+  /// **'Comprar Pro · {price}'**
+  String buyProPrice(String price);
+
   /// No description provided for @restorePurchases.
   ///
   /// In es, this message translates to:
   /// **'Restaurar compras'**
   String get restorePurchases;
+
+  /// No description provided for @restorePurchasesHint.
+  ///
+  /// In es, this message translates to:
+  /// **'Usa la misma cuenta de Google Play o App Store con la que compraste Pro.'**
+  String get restorePurchasesHint;
 
   /// No description provided for @proActiveTitle.
   ///

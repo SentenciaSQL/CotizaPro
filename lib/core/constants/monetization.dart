@@ -1,6 +1,6 @@
-/// Store product id for the non-consumable Pro unlock.
-/// Create this product in Google Play Console and App Store Connect.
-/// Indicative price: US$5.99. The store is the source of the charged price.
+/// Non-consumable product id. Create it in Google Play Console and App Store
+/// Connect. The charged price is the one returned by the store, never a
+/// constant in this file.
 const String proProductId = 'cotizapro_pro';
 
 /// Google sample ids. Replace both the native app ids and these unit ids

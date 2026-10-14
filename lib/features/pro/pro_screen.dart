@@ -1,7 +1,7 @@
 import 'package:cotizapro/core/l10n/l10n_ext.dart';
 import 'package:cotizapro/core/widgets/app_widgets.dart';
 import 'package:cotizapro/data/providers.dart';
-import 'package:cotizapro/l10n/generated/app_localizations.dart';
+import 'package:cotizapro/features/pro/billing_messages.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -28,7 +28,11 @@ class _ProScreenState extends ConsumerState<ProScreen> {
     final billing = ref.watch(billingStateProvider);
     final isPro = settings.asData?.value.isPro ?? false;
     final state = billing.asData?.value;
-    final message = _message(l10n, state?.messageCode);
+    final product = state?.product;
+    final checking = state?.checkingEntitlement == true;
+    final purchasePending = state?.pending == true;
+    final loadingProduct = state?.loadingProduct == true;
+    final message = billingMessage(l10n, state?.messageCode);
     return Scaffold(
       appBar: AppBar(title: Text(l10n.proTitle)),
       body: ListView(
@@ -70,32 +74,42 @@ class _ProScreenState extends ConsumerState<ProScreen> {
               ],
             ),
           ),
-          if (state?.product != null) ...[
+          if (product != null) ...[
             const SizedBox(height: 16),
-            Text(
-              '${l10n.priceFromStore}: ${state!.product!.price}',
-              style: context.text.titleMedium,
-            ),
+            Text(l10n.priceFromStore, style: context.text.bodyMedium),
+            const SizedBox(height: 4),
+            Text(product.price, style: context.text.headlineSmall),
           ],
           if (message != null) ...[
             const SizedBox(height: 12),
             Text(message, style: context.text.bodyMedium),
           ],
+          const SizedBox(height: 20),
           if (!isPro) ...[
-            const SizedBox(height: 20),
             PrimaryButton(
-              label: state?.product == null ? l10n.retry : l10n.buyPro,
-              loading: state?.loadingProduct == true || state?.pending == true,
-              onPressed: state?.product == null
-                  ? () => ref.read(billingControllerProvider).loadProduct()
-                  : () => ref.read(billingControllerProvider).buy(),
+              label: product == null
+                  ? l10n.retry
+                  : l10n.buyProPrice(product.price),
+              loading: loadingProduct || purchasePending || checking,
+              onPressed: loadingProduct || purchasePending || checking
+                  ? null
+                  : () {
+                      final billing = ref.read(billingControllerProvider);
+                      if (product == null) {
+                        billing.loadProduct();
+                      } else {
+                        billing.buy();
+                      }
+                    },
             ),
             const SizedBox(height: 8),
-            SecondaryButton(
-              label: l10n.restorePurchases,
-              onPressed: () => ref.read(billingControllerProvider).restore(),
-            ),
           ],
+          SecondaryButton(
+            label: l10n.restorePurchases,
+            onPressed: checking
+                ? null
+                : () => ref.read(billingControllerProvider).restore(),
+          ),
         ],
       ),
     );
@@ -112,19 +126,5 @@ class _ProScreenState extends ConsumerState<ProScreen> {
         ],
       ),
     );
-  }
-
-  String? _message(AppLocalizations l10n, String? code) {
-    return switch (code) {
-      'pending' => l10n.purchasePending,
-      'cancelled' => l10n.purchaseCancelled,
-      'failed' => l10n.purchaseFailed,
-      'unavailable' => l10n.storeUnavailable,
-      'missing' => l10n.productUnavailable,
-      'restoreEmpty' => l10n.restoreEmpty,
-      'restored' => l10n.restoreDone,
-      'unlocked' => l10n.proActiveTitle,
-      _ => null,
-    };
   }
 }

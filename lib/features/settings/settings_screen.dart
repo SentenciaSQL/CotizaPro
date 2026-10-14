@@ -2,6 +2,7 @@ import 'package:cotizapro/core/l10n/l10n_ext.dart';
 import 'package:cotizapro/core/widgets/app_widgets.dart';
 import 'package:cotizapro/data/database/app_database.dart';
 import 'package:cotizapro/data/providers.dart';
+import 'package:cotizapro/features/pro/billing_messages.dart';
 import 'package:cotizapro/features/pro/limit_dialog.dart';
 import 'package:drift/drift.dart' show Value;
 import 'package:flutter/material.dart';
@@ -23,6 +24,8 @@ class SettingsScreen extends ConsumerWidget {
             ErrorView(message: l10n.errorGeneric, retryLabel: l10n.retry),
         data: (value) {
           final isPro = value.isPro;
+          final billing = ref.watch(billingStateProvider).asData?.value;
+          final restoring = billing?.checkingEntitlement == true;
           return ListView(
             padding: const EdgeInsets.fromLTRB(20, 8, 20, 32),
             children: [
@@ -94,6 +97,18 @@ class SettingsScreen extends ConsumerWidget {
                 title: l10n.openPro,
                 subtitle: isPro ? l10n.proActiveTitle : l10n.proSubtitle,
                 onTap: () => context.push('/pro'),
+              ),
+              _Link(
+                title: l10n.restorePurchases,
+                subtitle: l10n.restorePurchasesHint,
+                trailing: restoring
+                    ? const SizedBox(
+                        width: 22,
+                        height: 22,
+                        child: CircularProgressIndicator(strokeWidth: 2.4),
+                      )
+                    : null,
+                onTap: restoring ? null : () => _restore(context, ref),
               ),
               _Link(
                 title: l10n.backup,
@@ -212,15 +227,26 @@ class SettingsScreen extends ConsumerWidget {
   }
 }
 
+Future<void> _restore(BuildContext context, WidgetRef ref) async {
+  await ref.read(billingControllerProvider).restore();
+  if (!context.mounted) return;
+  final code = ref.read(billingControllerProvider).state.messageCode;
+  final message = billingMessage(context.l10n, code);
+  if (message == null) return;
+  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message)));
+}
+
 class _Link extends StatelessWidget {
   const _Link({
     required this.title,
     required this.subtitle,
     required this.onTap,
+    this.trailing,
   });
   final String title;
   final String subtitle;
-  final VoidCallback onTap;
+  final VoidCallback? onTap;
+  final Widget? trailing;
 
   @override
   Widget build(BuildContext context) {
@@ -228,7 +254,7 @@ class _Link extends StatelessWidget {
       contentPadding: EdgeInsets.zero,
       title: Text(title, style: context.text.titleSmall),
       subtitle: Text(subtitle, maxLines: 2, overflow: TextOverflow.ellipsis),
-      trailing: const Icon(Icons.chevron_right_rounded),
+      trailing: trailing ?? const Icon(Icons.chevron_right_rounded),
       onTap: onTap,
     );
   }

@@ -65,11 +65,22 @@ class _AdBannerSlotState extends ConsumerState<AdBannerSlot> {
     _sync();
   }
 
+  bool get _entitlementOpen {
+    final billing = ref.read(billingStateProvider);
+    if (billing.isLoading) return true;
+    final state = billing.asData?.value;
+    return state == null || state.checkingEntitlement;
+  }
+
   void _sync() {
     final settings = ref.read(settingsProvider).asData?.value;
     final visible = TickerMode.valuesOf(context).enabled;
     final blocked =
-        settings == null || settings.isPro || !visible || !_supported;
+        settings == null ||
+        settings.isPro ||
+        _entitlementOpen ||
+        !visible ||
+        !_supported;
     if (blocked) {
       _release();
       return;
@@ -127,8 +138,18 @@ class _AdBannerSlotState extends ConsumerState<AdBannerSlot> {
 
   @override
   Widget build(BuildContext context) {
+    ref.listen(settingsProvider, (previous, next) => _sync());
+    ref.listen(billingStateProvider, (previous, next) => _sync());
     final settings = ref.watch(settingsProvider).asData?.value;
-    if (settings == null || settings.isPro || !_loaded || _ad == null) {
+    final billing = ref.watch(billingStateProvider);
+    final checking =
+        billing.isLoading ||
+        (billing.asData?.value.checkingEntitlement ?? false);
+    if (settings == null ||
+        settings.isPro ||
+        checking ||
+        !_loaded ||
+        _ad == null) {
       return const SizedBox.shrink();
     }
     final ad = _ad!;
