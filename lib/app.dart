@@ -85,6 +85,12 @@ class _BootScreen extends StatelessWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
+              Image.asset(
+                'assets/branding/mark_on_dark.png',
+                width: 96,
+                height: 96,
+              ),
+              const SizedBox(height: 16),
               const Text(
                 'CotizaPro',
                 style: TextStyle(

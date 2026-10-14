@@ -6,6 +6,7 @@ import 'package:cotizapro/data/providers.dart';
 import 'package:cotizapro/features/ads/ad_banner.dart';
 import 'package:cotizapro/features/pro/limit_dialog.dart';
 import 'package:cotizapro/features/quotations/quote_labels.dart';
+import 'package:cotizapro/features/services_catalog/catalog_labels.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -32,7 +33,8 @@ class _CatalogListScreenState extends ConsumerState<CatalogListScreen> {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     final catalog = ref.watch(catalogProvider);
-    final currency = ref.watch(profileProvider).asData?.value.currencyCode ?? 'USD';
+    final currency =
+        ref.watch(profileProvider).asData?.value.currencyCode ?? 'USD';
     final isPro = ref.watch(settingsProvider).asData?.value.isPro ?? false;
     final locale = Localizations.localeOf(context).toString();
     return Scaffold(
@@ -54,12 +56,18 @@ class _CatalogListScreenState extends ConsumerState<CatalogListScreen> {
           onRetry: () => ref.invalidate(catalogProvider),
         ),
         data: (items) {
-          final categories = items.map((item) => item.category.trim()).where((item) => item.isNotEmpty).toSet().toList()..sort();
+          final categories = orderedCatalogCategories(
+            items.map((item) => item.category),
+          );
           final query = _query.trim().toLowerCase();
           final visible = items.where((item) {
-            if (_category.isNotEmpty && item.category.trim() != _category) return false;
+            if (_category.isNotEmpty && item.category != _category) {
+              return false;
+            }
             if (query.isEmpty) return true;
-            return '${item.name} ${item.description ?? ''} ${item.category}'.toLowerCase().contains(query);
+            return '${item.name} ${item.description ?? ''} ${item.category}'
+                .toLowerCase()
+                .contains(query);
           }).toList();
           if (items.isEmpty) {
             return EmptyState(
@@ -93,9 +101,10 @@ class _CatalogListScreenState extends ConsumerState<CatalogListScreen> {
                         Padding(
                           padding: const EdgeInsets.only(left: 8),
                           child: FilterChip(
-                            label: Text(category),
+                            label: Text(catalogCategoryLabel(l10n, category)),
                             selected: _category == category,
-                            onSelected: (_) => setState(() => _category = category),
+                            onSelected: (_) =>
+                                setState(() => _category = category),
                           ),
                         ),
                     ],
@@ -115,14 +124,35 @@ class _CatalogListScreenState extends ConsumerState<CatalogListScreen> {
                     children: [
                       for (final item in visible)
                         ListTile(
-                          contentPadding: const EdgeInsets.symmetric(horizontal: 8),
-                          title: Text(item.name, style: context.text.titleSmall),
-                          subtitle: Text(
-                            [
-                              item.category.trim().isEmpty ? l10n.uncategorized : item.category,
-                              kindLabel(l10n, item.kind),
-                              unitLabel(l10n, item.unit),
-                            ].join(' · '),
+                          contentPadding: const EdgeInsets.symmetric(
+                            horizontal: 8,
+                            vertical: 4,
+                          ),
+                          title: Text(
+                            item.name,
+                            style: context.text.titleSmall,
+                          ),
+                          subtitle: Padding(
+                            padding: const EdgeInsets.only(top: 4),
+                            child: Wrap(
+                              spacing: 8,
+                              runSpacing: 6,
+                              crossAxisAlignment: WrapCrossAlignment.center,
+                              children: [
+                                CategoryTag(
+                                  label: catalogCategoryLabel(
+                                    l10n,
+                                    item.category.trim().isEmpty
+                                        ? 'general'
+                                        : item.category,
+                                  ),
+                                ),
+                                Text(
+                                  '${kindLabel(l10n, item.kind)} · ${unitLabel(l10n, item.unit)}',
+                                  style: context.text.bodySmall,
+                                ),
+                              ],
+                            ),
                           ),
                           trailing: Text(
                             formatMoney(item.unitPriceMinor, currency, locale),

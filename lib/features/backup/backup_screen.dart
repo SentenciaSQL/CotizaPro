@@ -27,7 +27,12 @@ class _BackupScreenState extends ConsumerState<BackupScreen> {
       body: ListView(
         padding: const EdgeInsets.fromLTRB(20, 8, 20, 32),
         children: [
-          Text(l10n.backupBody, style: context.text.bodyMedium?.copyWith(color: context.palette.muted)),
+          Text(
+            l10n.backupBody,
+            style: context.text.bodyMedium?.copyWith(
+              color: context.palette.muted,
+            ),
+          ),
           const SizedBox(height: 20),
           PrimaryButton(
             label: l10n.exportBackup,
@@ -52,7 +57,13 @@ class _BackupScreenState extends ConsumerState<BackupScreen> {
       final file = await ref.read(backupRepositoryProvider).exportToFile();
       await SharePlus.instance.share(
         ShareParams(
-          files: [XFile(file.path, mimeType: 'application/json', name: 'cotizapro-backup.json')],
+          files: [
+            XFile(
+              file.path,
+              mimeType: 'application/json',
+              name: 'cotizapro-backup.json',
+            ),
+          ],
           subject: 'CotizaPro',
         ),
       );

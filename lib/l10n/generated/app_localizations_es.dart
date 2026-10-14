@@ -534,6 +534,36 @@ class AppLocalizationsEs extends AppLocalizations {
   String get category => 'Categoría';
 
   @override
+  String get catGeneral => 'General';
+
+  @override
+  String get catLabor => 'Mano de obra';
+
+  @override
+  String get catMaterials => 'Materiales';
+
+  @override
+  String get catInstallation => 'Instalación';
+
+  @override
+  String get catRepair => 'Reparación';
+
+  @override
+  String get catMaintenance => 'Mantenimiento';
+
+  @override
+  String get catTransport => 'Transporte';
+
+  @override
+  String get catTools => 'Equipos y herramientas';
+
+  @override
+  String get catProfessional => 'Servicios profesionales';
+
+  @override
+  String get catOther => 'Otros';
+
+  @override
   String get allCategories => 'Todas';
 
   @override

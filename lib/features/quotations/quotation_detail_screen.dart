@@ -23,7 +23,9 @@ class QuotationDetailScreen extends ConsumerWidget {
     final l10n = context.l10n;
     final quotes = ref.watch(quotesProvider);
     final lines = ref.watch(quoteLinesProvider(id));
-    final quote = quotes.asData?.value.where((item) => item.id == id).firstOrNull;
+    final quote = quotes.asData?.value
+        .where((item) => item.id == id)
+        .firstOrNull;
     final storedLines = lines.asData?.value;
     return Scaffold(
       appBar: AppBar(
@@ -50,18 +52,31 @@ class QuotationDetailScreen extends ConsumerWidget {
     );
   }
 
-  Widget _body(BuildContext context, WidgetRef ref, Quotation quote, List<QuotationLine> lines) {
+  Widget _body(
+    BuildContext context,
+    WidgetRef ref,
+    Quotation quote,
+    List<QuotationLine> lines,
+  ) {
     final l10n = context.l10n;
     final locale = Localizations.localeOf(context).toString();
     final document = documentFromStored(quote, lines);
-    final display = displayStatusOf(status: quote.status, validUntil: quote.validUntil);
+    final display = displayStatusOf(
+      status: quote.status,
+      validUntil: quote.validUntil,
+    );
     return ListView(
       padding: const EdgeInsets.fromLTRB(20, 8, 20, 32),
       children: [
         Row(
           children: [
-            Expanded(child: Text(document.number, style: context.text.headlineMedium)),
-            StatusBadge(label: statusLabel(l10n, display), tone: statusTone(display)),
+            Expanded(
+              child: Text(document.number, style: context.text.headlineMedium),
+            ),
+            StatusBadge(
+              label: statusLabel(l10n, display),
+              tone: statusTone(display),
+            ),
           ],
         ),
         const SizedBox(height: 8),
@@ -79,7 +94,9 @@ class QuotationDetailScreen extends ConsumerWidget {
                   QuoteStatus.rejected => l10n.statusRejected,
                 }),
                 selected: quote.status == status.name,
-                onSelected: (_) => ref.read(quotationRepositoryProvider).updateStatus(id, status),
+                onSelected: (_) => ref
+                    .read(quotationRepositoryProvider)
+                    .updateStatus(id, status),
               ),
           ],
         ),
@@ -89,13 +106,19 @@ class QuotationDetailScreen extends ConsumerWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(document.clientName, style: context.text.titleMedium),
-              if (document.clientCompany.isNotEmpty) Text(document.clientCompany),
+              if (document.clientCompany.isNotEmpty)
+                Text(document.clientCompany),
               if (document.clientEmail.isNotEmpty) Text(document.clientEmail),
               if (document.clientPhone.isNotEmpty) Text(document.clientPhone),
-              if (document.clientAddress.isNotEmpty) Text(document.clientAddress),
+              if (document.clientAddress.isNotEmpty)
+                Text(document.clientAddress),
               const SizedBox(height: 12),
-              Text('${l10n.issueDate}: ${DateFormat.yMMMd(locale).format(document.issueDate.toLocal())}'),
-              Text('${l10n.validUntil}: ${DateFormat.yMMMd(locale).format(document.validUntil.toLocal())}'),
+              Text(
+                '${l10n.issueDate}: ${DateFormat.yMMMd(locale).format(document.issueDate.toLocal())}',
+              ),
+              Text(
+                '${l10n.validUntil}: ${DateFormat.yMMMd(locale).format(document.validUntil.toLocal())}',
+              ),
             ],
           ),
         ),
@@ -122,7 +145,13 @@ class QuotationDetailScreen extends ConsumerWidget {
                           ],
                         ),
                       ),
-                      Text(formatMoney(line.lineTotal, document.currencyCode, locale)),
+                      Text(
+                        formatMoney(
+                          line.lineTotal,
+                          document.currencyCode,
+                          locale,
+                        ),
+                      ),
                     ],
                   ),
                 ),
@@ -167,7 +196,11 @@ class QuotationDetailScreen extends ConsumerWidget {
     );
   }
 
-  Future<void> _onMenu(BuildContext context, WidgetRef ref, String value) async {
+  Future<void> _onMenu(
+    BuildContext context,
+    WidgetRef ref,
+    String value,
+  ) async {
     final l10n = context.l10n;
     switch (value) {
       case 'edit':
@@ -179,15 +212,17 @@ class QuotationDetailScreen extends ConsumerWidget {
         final isPro = ref.read(settingsProvider).asData?.value.isPro ?? false;
         final profile = await ref.read(profileRepositoryProvider).get();
         try {
-          final newId = await ref.read(quotationRepositoryProvider).duplicate(
-            id: id,
-            profile: profile,
-            isPro: isPro,
-          );
+          final newId = await ref
+              .read(quotationRepositoryProvider)
+              .duplicate(id: id, profile: profile, isPro: isPro);
           if (context.mounted) context.push('/quote/$newId');
         } on QuoteLimitException {
           if (context.mounted) {
-            await showProLimitDialog(context, title: l10n.quoteLimitTitle, body: l10n.quoteLimitBody);
+            await showProLimitDialog(
+              context,
+              title: l10n.quoteLimitTitle,
+              body: l10n.quoteLimitBody,
+            );
           }
         } catch (_) {
           if (context.mounted) showAppMessage(context, l10n.errorGeneric);

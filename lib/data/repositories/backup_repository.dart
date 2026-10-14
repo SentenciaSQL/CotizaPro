@@ -5,6 +5,7 @@ import 'package:drift/drift.dart';
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
 
+import '../../core/catalog/catalog_categories.dart';
 import '../../core/errors/app_exceptions.dart';
 import '../database/app_database.dart';
 import '../storage_directory.dart';
@@ -82,7 +83,9 @@ class BackupRepository {
                 id: Value(_reqInt(item, 'id')),
                 name: _reqString(item, 'name'),
                 description: Value(_optString(item, 'description')),
-                category: Value(_optString(item, 'category') ?? ''),
+                category: Value(
+                  normalizeCatalogCategory(_optString(item, 'category')),
+                ),
                 unit: Value(_reqString(item, 'unit')),
                 unitPriceMinor: _reqInt(item, 'unitPriceMinor'),
                 kind: _reqString(item, 'kind'),

@@ -55,15 +55,14 @@ int? parseDecimalToScaled(String raw, int scale) {
     fraction = fraction.padRight(scale, '0');
   }
 
-  final fractionValue = scale == 0 || fraction.isEmpty ? 0 : int.parse(fraction);
+  final fractionValue = scale == 0 || fraction.isEmpty
+      ? 0
+      : int.parse(fraction);
   final scaled = whole * pow10(scale) + fractionValue;
   return negative ? -scaled : scaled;
 }
 
-int lineTotalMinor({
-  required int quantityMilli,
-  required int unitPriceMinor,
-}) {
+int lineTotalMinor({required int quantityMilli, required int unitPriceMinor}) {
   final negative = (quantityMilli < 0) ^ (unitPriceMinor < 0);
   final product = quantityMilli.abs() * unitPriceMinor.abs();
   final rounded = (product + 500) ~/ 1000;
@@ -78,17 +77,7 @@ int percentOf(int amountMinor, int basisPoints) {
 }
 
 int currencyScale(String currencyCode) {
-  const zero = {
-    'JPY',
-    'KRW',
-    'VND',
-    'CLP',
-    'PYG',
-    'UGX',
-    'XAF',
-    'XOF',
-    'ISK',
-  };
+  const zero = {'JPY', 'KRW', 'VND', 'CLP', 'PYG', 'UGX', 'XAF', 'XOF', 'ISK'};
   const three = {'BHD', 'KWD', 'OMR', 'TND', 'JOD'};
   final code = currencyCode.toUpperCase();
   if (zero.contains(code)) return 0;

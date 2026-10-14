@@ -34,28 +34,48 @@ class _ProScreenState extends ConsumerState<ProScreen> {
       body: ListView(
         padding: const EdgeInsets.fromLTRB(20, 8, 20, 32),
         children: [
-          Text(isPro ? l10n.proActiveTitle : l10n.proSubtitle, style: context.text.headlineMedium),
+          Text(
+            isPro ? l10n.proActiveTitle : l10n.proSubtitle,
+            style: context.text.headlineMedium,
+          ),
           const SizedBox(height: 8),
           Text(
             isPro ? l10n.proActiveBody : l10n.proPriceNote,
-            style: context.text.bodyMedium?.copyWith(color: context.palette.muted),
+            style: context.text.bodyMedium?.copyWith(
+              color: context.palette.muted,
+            ),
           ),
           const SizedBox(height: 20),
           SurfacePanel(
             child: Column(
               children: [
-                _feature(context, Icons.all_inclusive_rounded, l10n.featureUnlimited),
+                _feature(
+                  context,
+                  Icons.all_inclusive_rounded,
+                  l10n.featureUnlimited,
+                ),
                 _feature(context, Icons.block_rounded, l10n.featureNoAds),
-                _feature(context, Icons.auto_awesome_outlined, l10n.featureNoBrand),
+                _feature(
+                  context,
+                  Icons.auto_awesome_outlined,
+                  l10n.featureNoBrand,
+                ),
                 _feature(context, Icons.draw_outlined, l10n.featureCustomize),
                 _feature(context, Icons.image_outlined, l10n.featureLogo),
-                _feature(context, Icons.table_chart_outlined, l10n.featureHistory),
+                _feature(
+                  context,
+                  Icons.table_chart_outlined,
+                  l10n.featureHistory,
+                ),
               ],
             ),
           ),
           if (state?.product != null) ...[
             const SizedBox(height: 16),
-            Text('${l10n.priceFromStore}: ${state!.product!.price}', style: context.text.titleMedium),
+            Text(
+              '${l10n.priceFromStore}: ${state!.product!.price}',
+              style: context.text.titleMedium,
+            ),
           ],
           if (message != null) ...[
             const SizedBox(height: 12),

@@ -11,7 +11,8 @@ const String testAndroidBannerId = 'ca-app-pub-3940256099942544/6300978111';
 const String testIosBannerId = 'ca-app-pub-3940256099942544/2934735716';
 
 /// Replace these when [useGoogleTestAds] is set to false.
-const String productionAndroidBannerId = 'ca-app-pub-XXXXXXXXXXXXXXXX/XXXXXXXXXX';
+const String productionAndroidBannerId =
+    'ca-app-pub-XXXXXXXXXXXXXXXX/XXXXXXXXXX';
 const String productionIosBannerId = 'ca-app-pub-XXXXXXXXXXXXXXXX/XXXXXXXXXX';
 
 String bannerAdUnitId({required bool android}) {

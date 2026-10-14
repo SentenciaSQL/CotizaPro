@@ -24,7 +24,8 @@ class QuotationListScreen extends ConsumerStatefulWidget {
   const QuotationListScreen({super.key});
 
   @override
-  ConsumerState<QuotationListScreen> createState() => _QuotationListScreenState();
+  ConsumerState<QuotationListScreen> createState() =>
+      _QuotationListScreenState();
 }
 
 class _QuotationListScreenState extends ConsumerState<QuotationListScreen> {
@@ -70,6 +71,15 @@ class _QuotationListScreenState extends ConsumerState<QuotationListScreen> {
           onRetry: () => ref.invalidate(quotesProvider),
         ),
         data: (items) {
+          if (items.isEmpty) {
+            return EmptyState(
+              icon: Icons.history_rounded,
+              title: l10n.emptyHistoryTitle,
+              body: l10n.emptyHistoryBody,
+              actionLabel: l10n.newQuote,
+              onAction: () => _create(context, isPro),
+            );
+          }
           final visible = _apply(items);
           return ListView(
             padding: const EdgeInsets.fromLTRB(20, 8, 20, 24),
@@ -84,7 +94,14 @@ class _QuotationListScreenState extends ConsumerState<QuotationListScreen> {
                 scrollDirection: Axis.horizontal,
                 child: Row(
                   children: [
-                    for (final filter in ['all', 'draft', 'sent', 'accepted', 'rejected', 'expired'])
+                    for (final filter in [
+                      'all',
+                      'draft',
+                      'sent',
+                      'accepted',
+                      'rejected',
+                      'expired',
+                    ])
                       Padding(
                         padding: const EdgeInsets.only(right: 8),
                         child: FilterChip(
@@ -102,7 +119,10 @@ class _QuotationListScreenState extends ConsumerState<QuotationListScreen> {
                   Expanded(
                     child: OutlinedButton(
                       onPressed: () => _pickRange(context, isPro),
-                      child: Text(_rangeLabel(context), overflow: TextOverflow.ellipsis),
+                      child: Text(
+                        _rangeLabel(context),
+                        overflow: TextOverflow.ellipsis,
+                      ),
                     ),
                   ),
                   if (_from != null || _to != null)
@@ -117,18 +137,14 @@ class _QuotationListScreenState extends ConsumerState<QuotationListScreen> {
                 ],
               ),
               const SizedBox(height: 8),
-              if (items.isEmpty)
-                EmptyState(
-                  icon: Icons.history_rounded,
-                  title: l10n.emptyHistoryTitle,
-                  body: l10n.emptyHistoryBody,
-                  actionLabel: l10n.newQuote,
-                  onAction: () => _create(context, isPro),
-                )
-              else if (visible.isEmpty)
+              if (visible.isEmpty)
                 Padding(
                   padding: const EdgeInsets.only(top: 32),
-                  child: Text(l10n.noFilterResults, textAlign: TextAlign.center, style: context.text.bodyMedium),
+                  child: Text(
+                    l10n.noFilterResults,
+                    textAlign: TextAlign.center,
+                    style: context.text.bodyMedium,
+                  ),
                 )
               else
                 SurfacePanel(
@@ -136,7 +152,8 @@ class _QuotationListScreenState extends ConsumerState<QuotationListScreen> {
                   child: Column(
                     children: [
                       for (var i = 0; i < visible.length; i++) ...[
-                        if (i > 0) Divider(height: 1, color: context.palette.line),
+                        if (i > 0)
+                          Divider(height: 1, color: context.palette.line),
                         QuoteTile(
                           quote: visible[i],
                           onTap: () => context.push('/quote/${visible[i].id}'),
@@ -156,7 +173,10 @@ class _QuotationListScreenState extends ConsumerState<QuotationListScreen> {
   List<Quotation> _apply(List<Quotation> items) {
     final query = _query.trim().toLowerCase();
     return items.where((quote) {
-      final display = displayStatusOf(status: quote.status, validUntil: quote.validUntil);
+      final display = displayStatusOf(
+        status: quote.status,
+        validUntil: quote.validUntil,
+      );
       final matchesFilter = switch (_filter) {
         'draft' => display == QuoteDisplayStatus.draft,
         'sent' => display == QuoteDisplayStatus.sent,
@@ -170,7 +190,9 @@ class _QuotationListScreenState extends ConsumerState<QuotationListScreen> {
       if (_from != null && day.isBefore(dateOnly(_from!))) return false;
       if (_to != null && day.isAfter(dateOnly(_to!))) return false;
       if (query.isEmpty) return true;
-      final haystack = '${quote.number} ${quote.clientName} ${quote.clientCompany ?? ''}'.toLowerCase();
+      final haystack =
+          '${quote.number} ${quote.clientName} ${quote.clientCompany ?? ''}'
+              .toLowerCase();
       return haystack.contains(query);
     }).toList();
   }
@@ -189,8 +211,11 @@ class _QuotationListScreenState extends ConsumerState<QuotationListScreen> {
   String _rangeLabel(BuildContext context) {
     final l10n = context.l10n;
     final locale = Localizations.localeOf(context).toString();
-    if (_from == null && _to == null) return '${l10n.dateFrom} – ${l10n.dateTo}';
-    String fmt(DateTime? value) => value == null ? '…' : DateFormat.yMMMd(locale).format(value);
+    if (_from == null && _to == null) {
+      return '${l10n.dateFrom} – ${l10n.dateTo}';
+    }
+    String fmt(DateTime? value) =>
+        value == null ? '…' : DateFormat.yMMMd(locale).format(value);
     return '${fmt(_from)} – ${fmt(_to)}';
   }
 
@@ -235,14 +260,23 @@ class _QuotationListScreenState extends ConsumerState<QuotationListScreen> {
   Future<void> _export(BuildContext context, bool isPro) async {
     final l10n = context.l10n;
     if (!isPro) {
-      await showProLimitDialog(context, title: l10n.proRequiredTitle, body: l10n.exportCsvProBody);
+      await showProLimitDialog(
+        context,
+        title: l10n.proRequiredTitle,
+        body: l10n.exportCsvProBody,
+      );
       return;
     }
     final items = _apply(ref.read(quotesProvider).asData?.value ?? const []);
     final locale = Localizations.localeOf(context).toString();
-    final buffer = StringBuffer('number,status,client,issueDate,validUntil,currency,total\n');
+    final buffer = StringBuffer(
+      'number,status,client,issueDate,validUntil,currency,total\n',
+    );
     for (final quote in items) {
-      final display = displayStatusOf(status: quote.status, validUntil: quote.validUntil);
+      final display = displayStatusOf(
+        status: quote.status,
+        validUntil: quote.validUntil,
+      );
       buffer.writeln(
         [
           _csv(quote.number),
@@ -251,7 +285,11 @@ class _QuotationListScreenState extends ConsumerState<QuotationListScreen> {
           _csv(DateFormat('yyyy-MM-dd').format(quote.issueDate.toLocal())),
           _csv(DateFormat('yyyy-MM-dd').format(quote.validUntil.toLocal())),
           quote.currencyCode,
-          formatScaled(quote.totalMinor, currencyScale(quote.currencyCode), locale),
+          formatScaled(
+            quote.totalMinor,
+            currencyScale(quote.currencyCode),
+            locale,
+          ),
         ].join(','),
       );
     }
@@ -259,7 +297,15 @@ class _QuotationListScreenState extends ConsumerState<QuotationListScreen> {
     final file = File(p.join(dir.path, 'cotizapro-historial.csv'));
     await file.writeAsString(buffer.toString());
     await SharePlus.instance.share(
-      ShareParams(files: [XFile(file.path, mimeType: 'text/csv', name: 'cotizapro-historial.csv')]),
+      ShareParams(
+        files: [
+          XFile(
+            file.path,
+            mimeType: 'text/csv',
+            name: 'cotizapro-historial.csv',
+          ),
+        ],
+      ),
     );
   }
 

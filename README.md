@@ -12,10 +12,11 @@ Android e iOS son las plataformas de publicación. El proyecto también incluye 
 - Totales en unidades menores enteras (céntimos), con redondeo half-up. El idioma y la moneda se configuran por separado.
 - Borrador, enviada, aceptada y rechazada. «Vencida» se calcula cuando una cotización enviada supera su fecha.
 - Vista previa y uso compartido del PDF en español o inglés, con varias páginas, marca de agua de borrador y pie de página.
-- Clientes, catálogo, historial con búsqueda y filtros, duplicar, editar y eliminar con confirmación.
+- Clientes, catálogo con categorías fijas traducibles, historial con búsqueda y filtros, duplicar, editar y eliminar con confirmación.
 - Perfil comercial, logotipo, numeración, tema claro, oscuro o del sistema, y copias de seguridad JSON.
 - Plan gratuito: 5 cotizaciones, 20 clientes y 30 conceptos. Consultar y exportar lo ya creado sigue disponible al llegar al límite.
 - Compra única no consumible `cotizapro_pro` para cotizaciones ilimitadas, sin anuncios, sin marca en el PDF, logotipo y opciones avanzadas de documento e historial. Pro solo se activa con una compra o restauración confirmada por la tienda.
+- Banners de prueba solo al final de las listas de clientes, catálogo e historial. No aparecen en el inicio, el editor, el PDF ni los estados vacíos.
 
 No hay datos de demostración. La primera apertura está vacía.
 
@@ -39,6 +40,7 @@ lib/
     ads/
   l10n/          app_es.arb, app_en.arb y código generado
 assets/fonts/    Manrope
+assets/branding/ símbolo, icono y logotipos de CotizaPro
 ```
 
 La base SQLite guarda perfil, ajustes, clientes, catálogo, cotizaciones y líneas. Cada cotización conserva una instantánea del cliente, del texto comercial y del logotipo.
@@ -63,9 +65,10 @@ flutter analyze lib
 flutter build apk --release
 flutter build appbundle --release
 flutter build ios --release
+python3 tool/build_brand.py
 ```
 
-`flutter build ios` requiere macOS y Xcode. En esta máquina Linux se comprobó `flutter analyze lib` y `flutter build linux --release`.
+`flutter build ios` requiere macOS y Xcode. En esta máquina Linux se comprobó `flutter analyze lib` y `flutter build linux --release`. `python3 tool/build_brand.py` regenera `assets/branding/`, los mipmaps de Android, el splash y las imágenes de lanzamiento de iOS. Requiere Pillow y la fuente Manrope ya incluida.
 
 Los archivos generados de Drift (`lib/data/database/app_database.g.dart`) y de localización (`lib/l10n/generated/`) están en el repositorio para poder compilar sin volver a generarlos.
 
@@ -81,9 +84,9 @@ Los identificadores actuales son los de prueba de Google.
 4. Configurar el formulario UMP de consentimiento para el EEE. La app pide consentimiento y, si no hay personalización, solicita anuncios no personalizados.
 5. Crear el producto no consumible `cotizapro_pro` en Play Console y App Store Connect. Precio orientativo: 5,99 USD. El precio cobrado lo define la tienda.
 6. Activar la capacidad In-App Purchase en Xcode y la facturación en Play Console. Probar con cuentas de licencia y StoreKit, no con compras simuladas en el código.
-7. Firmar los binarios de release con el almacén de la cuenta publicadora. El `applicationId` actual es `com.cotizapro.cotizapro`.
+7. Firmar los binarios de release con el almacén de la cuenta publicadora. El `applicationId` de Android es `com.sentenciasql.cotizapro`. La app de AdMob de producción debe registrarse con ese identificador; el id de prueba actual no está ligado a un paquete publicado.
 
-Los anuncios solo aparecen en historial, clientes, catálogo y ajustes, y desaparecen si Pro está activo. No se muestran en el inicio ni en el editor.
+Los anuncios solo aparecen al final de las listas con contenido de clientes, catálogo e historial, y desaparecen si Pro está activo. No se muestran en el inicio, el editor, el PDF, los estados vacíos ni los ajustes.
 
 ## Verificación manual
 
@@ -104,6 +107,6 @@ Los anuncios solo aparecen en historial, clientes, catálogo y ajustes, y desapa
 - La restauración espera un breve intervalo del flujo de la tienda. Una restauración vacía no revoca un Pro ya confirmado.
 - El logotipo se limita a 2 MB (png, jpg o webp). Si el disco falla después de guardar la fila, la ruta del logotipo puede quedar huérfana.
 - No hay historial de versiones de una cotización: se conserva el último guardado y su instantánea.
-- El icono de lanzamiento sigue siendo el de la plantilla de Flutter.
+- El icono y el splash usan la marca de CotizaPro. En este entorno no se ejecutó la app en un dispositivo Android o iOS, así que el splash nativo no se comprobó en un teléfono.
 - iOS no se puede compilar en Linux.
 - Los anuncios y la compra requieren los ids y el producto de producción descritos arriba.

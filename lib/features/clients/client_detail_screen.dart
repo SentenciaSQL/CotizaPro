@@ -34,11 +34,15 @@ class ClientDetailScreen extends ConsumerWidget {
       ),
       body: clients.when(
         loading: () => const LoadingView(),
-        error: (error, stack) => ErrorView(message: l10n.errorGeneric, retryLabel: l10n.retry),
+        error: (error, stack) =>
+            ErrorView(message: l10n.errorGeneric, retryLabel: l10n.retry),
         data: (items) {
           final client = items.where((item) => item.id == id).firstOrNull;
           if (client == null) {
-            return ErrorView(message: l10n.errorGeneric, retryLabel: l10n.retry);
+            return ErrorView(
+              message: l10n.errorGeneric,
+              retryLabel: l10n.retry,
+            );
           }
           final rows = <(String, String)>[
             (l10n.company, client.company ?? ''),
@@ -55,7 +59,12 @@ class ClientDetailScreen extends ConsumerWidget {
                 children: [
                   InitialsAvatar(name: client.name, size: 56),
                   const SizedBox(width: 14),
-                  Expanded(child: Text(client.name, style: context.text.headlineMedium)),
+                  Expanded(
+                    child: Text(
+                      client.name,
+                      style: context.text.headlineMedium,
+                    ),
+                  ),
                 ],
               ),
               if (rows.isNotEmpty) ...[
@@ -68,8 +77,19 @@ class ClientDetailScreen extends ConsumerWidget {
                         Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            SizedBox(width: 110, child: Text(rows[i].$1, style: context.text.bodySmall)),
-                            Expanded(child: Text(rows[i].$2, style: context.text.bodyMedium)),
+                            SizedBox(
+                              width: 110,
+                              child: Text(
+                                rows[i].$1,
+                                style: context.text.bodySmall,
+                              ),
+                            ),
+                            Expanded(
+                              child: Text(
+                                rows[i].$2,
+                                style: context.text.bodyMedium,
+                              ),
+                            ),
                           ],
                         ),
                       ],
@@ -81,19 +101,31 @@ class ClientDetailScreen extends ConsumerWidget {
               Text(l10n.clientQuotes, style: context.text.titleMedium),
               const SizedBox(height: 8),
               quotes.when(
-                loading: () => const Padding(padding: EdgeInsets.all(24), child: LoadingView()),
+                loading: () => const Padding(
+                  padding: EdgeInsets.all(24),
+                  child: LoadingView(),
+                ),
                 error: (error, stack) => Text(l10n.errorGeneric),
                 data: (list) {
                   if (list.isEmpty) {
-                    return Text(l10n.noClientQuotes, style: context.text.bodyMedium?.copyWith(color: context.palette.muted));
+                    return EmptyState(
+                      icon: Icons.description_outlined,
+                      title: l10n.noClientQuotes,
+                      body: '',
+                      expand: false,
+                    );
                   }
                   return SurfacePanel(
                     padding: const EdgeInsets.symmetric(horizontal: 16),
                     child: Column(
                       children: [
                         for (var i = 0; i < list.length; i++) ...[
-                          if (i > 0) Divider(height: 1, color: context.palette.line),
-                          QuoteTile(quote: list[i], onTap: () => context.push('/quote/${list[i].id}')),
+                          if (i > 0)
+                            Divider(height: 1, color: context.palette.line),
+                          QuoteTile(
+                            quote: list[i],
+                            onTap: () => context.push('/quote/${list[i].id}'),
+                          ),
                         ],
                       ],
                     ),

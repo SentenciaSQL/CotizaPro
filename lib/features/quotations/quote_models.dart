@@ -11,16 +11,10 @@ enum QuoteDisplayStatus { draft, sent, accepted, rejected, expired }
 
 enum UnitCode { unit, hour, day, meter, squareMeter, kg }
 
-const unitCodes = <String>[
-  'unit',
-  'hour',
-  'day',
-  'meter',
-  'squareMeter',
-  'kg',
-];
+const unitCodes = <String>['unit', 'hour', 'day', 'meter', 'squareMeter', 'kg'];
 
-DateTime dateOnly(DateTime value) => DateTime(value.year, value.month, value.day);
+DateTime dateOnly(DateTime value) =>
+    DateTime(value.year, value.month, value.day);
 
 QuoteStatus parseQuoteStatus(String value) {
   return QuoteStatus.values.firstWhere(
@@ -419,10 +413,7 @@ QuoteDocument documentFromDraft(
   );
 }
 
-QuoteDocument documentFromStored(
-  Quotation quote,
-  List<QuotationLine> lines,
-) {
+QuoteDocument documentFromStored(Quotation quote, List<QuotationLine> lines) {
   final display = displayStatusOf(
     status: quote.status,
     validUntil: quote.validUntil,
