@@ -6951,30 +6951,32 @@ typedef $$AppSettingsTableProcessedTableManager =
       AppSetting,
       PrefetchHooks Function()
     >;
-typedef $$ClientsTableCreateCompanionBuilder = ClientsCompanion Function({
-  Value<int> id,
-  required String name,
-  Value<String?> company,
-  Value<String?> email,
-  Value<String?> phone,
-  Value<String?> address,
-  Value<String?> taxId,
-  Value<String?> notes,
-  required DateTime createdAt,
-  required DateTime updatedAt,
-});
-typedef $$ClientsTableUpdateCompanionBuilder = ClientsCompanion Function({
-  Value<int> id,
-  Value<String> name,
-  Value<String?> company,
-  Value<String?> email,
-  Value<String?> phone,
-  Value<String?> address,
-  Value<String?> taxId,
-  Value<String?> notes,
-  Value<DateTime> createdAt,
-  Value<DateTime> updatedAt,
-});
+typedef $$ClientsTableCreateCompanionBuilder =
+    ClientsCompanion Function({
+      Value<int> id,
+      required String name,
+      Value<String?> company,
+      Value<String?> email,
+      Value<String?> phone,
+      Value<String?> address,
+      Value<String?> taxId,
+      Value<String?> notes,
+      required DateTime createdAt,
+      required DateTime updatedAt,
+    });
+typedef $$ClientsTableUpdateCompanionBuilder =
+    ClientsCompanion Function({
+      Value<int> id,
+      Value<String> name,
+      Value<String?> company,
+      Value<String?> email,
+      Value<String?> phone,
+      Value<String?> address,
+      Value<String?> taxId,
+      Value<String?> notes,
+      Value<DateTime> createdAt,
+      Value<DateTime> updatedAt,
+    });
 
 final class $$ClientsTableReferences
     extends BaseReferences<_$AppDatabase, $ClientsTable, Client> {
@@ -7713,84 +7715,86 @@ typedef $$CatalogItemsTableProcessedTableManager =
       CatalogItem,
       PrefetchHooks Function({bool quotationLinesRefs})
     >;
-typedef $$QuotationsTableCreateCompanionBuilder = QuotationsCompanion Function({
-  Value<int> id,
-  required String number,
-  required String status,
-  Value<int?> clientId,
-  required String clientName,
-  Value<String?> clientCompany,
-  Value<String?> clientEmail,
-  Value<String?> clientPhone,
-  Value<String?> clientAddress,
-  Value<String?> clientTaxId,
-  required DateTime issueDate,
-  required DateTime validUntil,
-  required String currencyCode,
-  Value<String> notes,
-  Value<String> terms,
-  Value<String> discountMode,
-  Value<int> discountBps,
-  Value<int> discountFixedMinor,
-  Value<int> taxRateBps,
-  Value<String> feeLabel,
-  Value<int> feeMinor,
-  required int subtotalMinor,
-  required int discountMinor,
-  required int taxMinor,
-  required int totalMinor,
-  Value<String> businessName,
-  Value<String> businessOwner,
-  Value<String?> businessTaxId,
-  Value<String?> businessEmail,
-  Value<String?> businessPhone,
-  Value<String?> businessAddress,
-  Value<String?> businessWebsite,
-  Value<String> businessTagline,
-  Value<String> businessFooter,
-  Value<String?> logoSnapshotPath,
-  required DateTime createdAt,
-  required DateTime updatedAt,
-});
-typedef $$QuotationsTableUpdateCompanionBuilder = QuotationsCompanion Function({
-  Value<int> id,
-  Value<String> number,
-  Value<String> status,
-  Value<int?> clientId,
-  Value<String> clientName,
-  Value<String?> clientCompany,
-  Value<String?> clientEmail,
-  Value<String?> clientPhone,
-  Value<String?> clientAddress,
-  Value<String?> clientTaxId,
-  Value<DateTime> issueDate,
-  Value<DateTime> validUntil,
-  Value<String> currencyCode,
-  Value<String> notes,
-  Value<String> terms,
-  Value<String> discountMode,
-  Value<int> discountBps,
-  Value<int> discountFixedMinor,
-  Value<int> taxRateBps,
-  Value<String> feeLabel,
-  Value<int> feeMinor,
-  Value<int> subtotalMinor,
-  Value<int> discountMinor,
-  Value<int> taxMinor,
-  Value<int> totalMinor,
-  Value<String> businessName,
-  Value<String> businessOwner,
-  Value<String?> businessTaxId,
-  Value<String?> businessEmail,
-  Value<String?> businessPhone,
-  Value<String?> businessAddress,
-  Value<String?> businessWebsite,
-  Value<String> businessTagline,
-  Value<String> businessFooter,
-  Value<String?> logoSnapshotPath,
-  Value<DateTime> createdAt,
-  Value<DateTime> updatedAt,
-});
+typedef $$QuotationsTableCreateCompanionBuilder =
+    QuotationsCompanion Function({
+      Value<int> id,
+      required String number,
+      required String status,
+      Value<int?> clientId,
+      required String clientName,
+      Value<String?> clientCompany,
+      Value<String?> clientEmail,
+      Value<String?> clientPhone,
+      Value<String?> clientAddress,
+      Value<String?> clientTaxId,
+      required DateTime issueDate,
+      required DateTime validUntil,
+      required String currencyCode,
+      Value<String> notes,
+      Value<String> terms,
+      Value<String> discountMode,
+      Value<int> discountBps,
+      Value<int> discountFixedMinor,
+      Value<int> taxRateBps,
+      Value<String> feeLabel,
+      Value<int> feeMinor,
+      required int subtotalMinor,
+      required int discountMinor,
+      required int taxMinor,
+      required int totalMinor,
+      Value<String> businessName,
+      Value<String> businessOwner,
+      Value<String?> businessTaxId,
+      Value<String?> businessEmail,
+      Value<String?> businessPhone,
+      Value<String?> businessAddress,
+      Value<String?> businessWebsite,
+      Value<String> businessTagline,
+      Value<String> businessFooter,
+      Value<String?> logoSnapshotPath,
+      required DateTime createdAt,
+      required DateTime updatedAt,
+    });
+typedef $$QuotationsTableUpdateCompanionBuilder =
+    QuotationsCompanion Function({
+      Value<int> id,
+      Value<String> number,
+      Value<String> status,
+      Value<int?> clientId,
+      Value<String> clientName,
+      Value<String?> clientCompany,
+      Value<String?> clientEmail,
+      Value<String?> clientPhone,
+      Value<String?> clientAddress,
+      Value<String?> clientTaxId,
+      Value<DateTime> issueDate,
+      Value<DateTime> validUntil,
+      Value<String> currencyCode,
+      Value<String> notes,
+      Value<String> terms,
+      Value<String> discountMode,
+      Value<int> discountBps,
+      Value<int> discountFixedMinor,
+      Value<int> taxRateBps,
+      Value<String> feeLabel,
+      Value<int> feeMinor,
+      Value<int> subtotalMinor,
+      Value<int> discountMinor,
+      Value<int> taxMinor,
+      Value<int> totalMinor,
+      Value<String> businessName,
+      Value<String> businessOwner,
+      Value<String?> businessTaxId,
+      Value<String?> businessEmail,
+      Value<String?> businessPhone,
+      Value<String?> businessAddress,
+      Value<String?> businessWebsite,
+      Value<String> businessTagline,
+      Value<String> businessFooter,
+      Value<String?> logoSnapshotPath,
+      Value<DateTime> createdAt,
+      Value<DateTime> updatedAt,
+    });
 
 final class $$QuotationsTableReferences
     extends BaseReferences<_$AppDatabase, $QuotationsTable, Quotation> {
@@ -8713,15 +8717,18 @@ class $$QuotationsTableTableManager
                         >
                       >(state) {
                         if (clientId) {
-                          state = state.withJoin(
-                            currentTable: table,
-                            currentColumn: table.clientId,
-                            referencedTable: $$QuotationsTableReferences
-                                ._clientIdTable(db),
-                            referencedColumn: $$QuotationsTableReferences
-                                ._clientIdTable(db)
-                                .id,
-                          ) as T;
+                          state =
+                              state.withJoin(
+                                    currentTable: table,
+                                    currentColumn: table.clientId,
+                                    referencedTable: $$QuotationsTableReferences
+                                        ._clientIdTable(db),
+                                    referencedColumn:
+                                        $$QuotationsTableReferences
+                                            ._clientIdTable(db)
+                                            .id,
+                                  )
+                                  as T;
                         }
 
                         return state;
@@ -9247,26 +9254,34 @@ class $$QuotationLinesTableTableManager
                         >
                       >(state) {
                         if (quotationId) {
-                          state = state.withJoin(
-                            currentTable: table,
-                            currentColumn: table.quotationId,
-                            referencedTable: $$QuotationLinesTableReferences
-                                ._quotationIdTable(db),
-                            referencedColumn: $$QuotationLinesTableReferences
-                                ._quotationIdTable(db)
-                                .id,
-                          ) as T;
+                          state =
+                              state.withJoin(
+                                    currentTable: table,
+                                    currentColumn: table.quotationId,
+                                    referencedTable:
+                                        $$QuotationLinesTableReferences
+                                            ._quotationIdTable(db),
+                                    referencedColumn:
+                                        $$QuotationLinesTableReferences
+                                            ._quotationIdTable(db)
+                                            .id,
+                                  )
+                                  as T;
                         }
                         if (catalogItemId) {
-                          state = state.withJoin(
-                            currentTable: table,
-                            currentColumn: table.catalogItemId,
-                            referencedTable: $$QuotationLinesTableReferences
-                                ._catalogItemIdTable(db),
-                            referencedColumn: $$QuotationLinesTableReferences
-                                ._catalogItemIdTable(db)
-                                .id,
-                          ) as T;
+                          state =
+                              state.withJoin(
+                                    currentTable: table,
+                                    currentColumn: table.catalogItemId,
+                                    referencedTable:
+                                        $$QuotationLinesTableReferences
+                                            ._catalogItemIdTable(db),
+                                    referencedColumn:
+                                        $$QuotationLinesTableReferences
+                                            ._catalogItemIdTable(db)
+                                            .id,
+                                  )
+                                  as T;
                         }
 
                         return state;
